@@ -11,10 +11,6 @@
 |
 */
 Auth::routes();
-
-Route::get('/', function () {
-    return view('welcome');
-});
 //Стартовая страница
 Route::group(['prefix'=>'dishes'], function () {
     Route::get('/alldishes', 'DishesController@indexAction')->name('alldishes');

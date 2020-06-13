@@ -6,7 +6,6 @@ use App\Categories;
 use App\Dishes;
 use App\DishesEvent;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class StatisticController extends Controller
 {
@@ -15,22 +14,13 @@ class StatisticController extends Controller
         $categories = Categories::all();
         $text = '';
         $counts = '';
-        //$categories->map(function ($item) use (&$text, &$counts){
         foreach ($categories as $category){
             $text .= '"'.$category->name .'",';
-//            $query = 'select sum(dishes_event.count) as counts from dishes_event join dishes on dishes.id = dishes_event.dish_id
-//            where dishes.category_id = '.$category->id;
-//            dd($query);
-            //$value = DB::select($query);
             $value = DishesEvent::join('dishes','dishes_event.dish_id','dishes.id')
                 ->where('dishes.category_id',$category->id)->sum('dishes_event.count');
-            //$value = $value->counts;
-               //dd($value);
             $counts .= $value .',';
         }
 
-
-        //$categories = Categories::all();
         return view('statistic',compact('text','counts'));
     }
 
@@ -46,14 +36,9 @@ class StatisticController extends Controller
         //$categories->map(function ($item) use (&$text, &$counts){
         foreach ($categories as $category){
             $text .= '"'.$category->name .'",';
-//            $query = 'select sum(dishes_event.count) as counts from dishes_event join dishes on dishes.id = dishes_event.dish_id
-//            where dishes.category_id = '.$category->id;
-//            dd($query);
-            //$value = DB::select($query);
             $value = DishesEvent::join('dishes','dishes_event.dish_id','dishes.id')
                 ->where('dishes.category_id',$category->id)->sum('dishes_event.count');
-            //$value = $value->counts;
-            //dd($value);
+
             $counts .= $value .',';
         }
         return view('statistic',compact('text','counts'));;
